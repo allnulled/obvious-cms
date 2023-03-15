@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS</title>
+    <link rel="stylesheet" href="/page/styles/7.css" />
+    <link rel="stylesheet" href="/page/styles/framework.css" />
+    <link rel="stylesheet" href="/page/styles/theme.css" />
+    <link rel="stylesheet" href="/page/styles/custom.css" />
+    <style>
+    </style>
+</head>
+
+<body>
+    <div class="landscape_layer_container">
+        <div class="landscape_layer"></div>
+    </div>
+    <div class="">
+        <div class="centered_box_1">
+            <div class="centered_box_2">
+                <div class="centered_box_3">
+                    <div style="display: inline-block;">
+                        <div class="window glass active" style="max-width: 300px; width: 100%; text-align: left;">
+                            <div class="title-bar">
+                                <div class="title-bar-text">Identificación</div>
+                            </div>
+                            <div class="window-body has-space">
+                                <div style="padding-top:10px;">
+                                    <div><label>Usuario:</label></div>
+                                    <div><input type="text" id="login_user" style="width: 100%;" /></div>
+                                </div>
+                                <div style="padding-top:10px;">
+                                    <div><label>Contraseña:</label></div>
+                                    <div><input type="password" id="login_password" style="width: 100%;" /></div>
+                                </div>
+                                <div style="padding-top:20px;">
+                                    <div style="text-align: right;">
+                                        <button onclick="login_attempt()">Entrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="status-bar">
+                                <p class="status-bar-field" style="white-space: nowrap; text-align: right;">
+                                    <a href="#/solicitar-registro">Solicitar registro</a>
+                                </p>
+                                <p class="status-bar-field" style="white-space: nowrap;width:100%; ">
+                                    <span>Conexión: establecida.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function login_attempt() {
+            const user = document.getElementById("login_user").value;
+            const password = document.getElementById("login_password").value;
+            console.log(user, password);
+            window.location.href = "/static/app/main/index.1.html";
+
+        }
+    </script>
+</body>
+
+</html>

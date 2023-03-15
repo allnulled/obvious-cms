@@ -1,0 +1,1 @@
+transforma controladores (en ./input/*.js) a JSON usable en routing.json (en ./output/*.json).

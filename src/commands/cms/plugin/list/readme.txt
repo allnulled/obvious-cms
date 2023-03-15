@@ -1,0 +1,1 @@
+lista los plugins del registro local.

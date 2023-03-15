@@ -1,0 +1,1 @@
+genera un json describiendo el esquema de la base de datos

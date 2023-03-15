@@ -1,0 +1,43 @@
+asigno window.comandos_globales.panel_de_autorizaciones como {
+    método $ejecutar con (componente) donde {
+      imprimo "ejecutar".
+    }.
+    método $cargar_componente con (componente) donde {
+      imprimo "cargar componente".
+      si vue.options.components contiene clave "PanelDeAutorizaciones" {
+        retorno true.
+      }.
+      hago un componente vue2 con nombre "PanelDeAutorizaciones" con plantilla {
+        <div class="PanelDeAutorizaciones Component">
+          <div class="window">
+            <div class="title-bar">
+              <div class="title-bar-text">panel de autorizaciones</div>
+            </div>
+            <div class="window-body">
+              <p>
+                <ul class="simple_list">
+                  <li>
+                    <span class="link" v-on:click="() => app.visualizar_componente('usuarios')">usuarios</span>
+                  </li>
+                  <li>
+                    <span class="link" v-on:click="() => app.visualizar_componente('grupos')">grupos</span>
+                  </li>
+                  <li>
+                    <span class="link" v-on:click="() => app.visualizar_componente('permisos')">permisos</span>
+                  </li>
+                  <li>
+                    <span class="link" v-on:click="() => app.visualizar_componente('sesiones')">sesiones</span>
+                  </li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </div>
+      }.
+      retorno false.
+    }.
+    método $visualizar con (componente) donde {
+      imprimo "visualizar".
+      hago componente.visualizar_componente("PanelDeAutorizaciones", { app: componente }, {}).
+    }.
+}.

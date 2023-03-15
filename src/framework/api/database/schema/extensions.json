@@ -1,0 +1,17 @@
+{
+    "perTable": {
+        "cms_user": {
+            "extra_field_per_table_as_example": true
+        }
+    },
+    "perColumn": {
+        "cms_user": {
+            "id": {
+                "extra_field_per_column_as_example": true
+            }
+        },
+        "cms_group": {},
+        "cms_permission": {},
+        "cms_session": {}
+    }
+}

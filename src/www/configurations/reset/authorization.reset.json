@@ -1,0 +1,40 @@
+{
+  "#ids": {
+    "users": 1,
+    "groups": 1,
+    "permissions": 1,
+    "sessions": 0
+  },
+  "users": {
+    "1": {
+      "_id": 1,
+      "name": "administrator",
+      "password": "administrator.123",
+      "picture": null,
+      "groups": [
+        "1"
+      ],
+      "permissions": [
+        "1"
+      ]
+    }
+  },
+  "groups": {
+    "1": {
+      "_id": 1,
+      "name": "administrators",
+      "description": "The administrators",
+      "permissions": [
+        "1"
+      ]
+    }
+  },
+  "permissions": {
+    "1": {
+      "_id": 1,
+      "name": "to administrate",
+      "description": "To administrate everything"
+    }
+  },
+  "sessions": {}
+}

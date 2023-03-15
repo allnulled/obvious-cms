@@ -1,0 +1,70 @@
+{
+  "success": [
+    [
+      {
+        "file": "/home/carlos/Escritorio/Nuevo/rest.network/src/commands/cms/build/docs/index.js"
+      }
+    ],
+    [
+      {
+        "_": [
+          "\nFunción que sobrecarga recursivamente una variable raíz con módulos JavaScript desde un directorio dado.\n"
+        ],
+        "@name": [
+          " api_loader"
+        ],
+        "@access": [
+          " this.api.utilities.api.load"
+        ],
+        "@type": [
+          " {Function}"
+        ],
+        "@async": [
+          " true"
+        ],
+        "@param": [
+          " {String} directory | required | Directorio a integrar en la API",
+          " {Any} base | required | Objeto último en el proceso de integración",
+          " {String} property_id | optional | Propiedad inmediata a integrar",
+          " {Any} root_parameter | optional | Objeto raíz de la API",
+          " {Array<String>} property_tracker | Trazo de propiedades hasta el lugar actual"
+        ],
+        "@returns": [
+          " {Promise<Object>} base | El objeto inicial llenado con la API\n"
+        ],
+        "file": "/home/carlos/Escritorio/Nuevo/rest.network/src/framework/api/utilities/api/load.js"
+      }
+    ],
+    [
+      {
+        "_": [
+          "\nFunción que sobrecarga recursivamente una variable raíz con módulos JavaScript desde un directorio dado.\n"
+        ],
+        "@name": [
+          " api_sync_loader"
+        ],
+        "@access": [
+          " this.api.utilities.api.sync.load"
+        ],
+        "@type": [
+          " {Function}"
+        ],
+        "@async": [
+          " false"
+        ],
+        "@param": [
+          " {String} directory | required | Directorio a integrar en la API",
+          " {Any} base | required | Objeto último en el proceso de integración",
+          " {String} property_id | optional | Propiedad inmediata a integrar",
+          " {Any} root_parameter | optional | Objeto raíz de la API",
+          " {Array<String>} property_tracker | Trazo de propiedades hasta el lugar actual"
+        ],
+        "@returns": [
+          " {Object} base | El objeto inicial llenado con la API\n"
+        ],
+        "file": "/home/carlos/Escritorio/Nuevo/rest.network/src/framework/api/utilities/api/sync/load.js"
+      }
+    ]
+  ],
+  "error": []
+}

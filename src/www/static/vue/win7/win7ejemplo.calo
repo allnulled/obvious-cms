@@ -1,0 +1,146 @@
+creo Win7Ejemplo como un componente vue2 con nombre "Win7Ejemplo" con plantilla {
+  <div class="Win7Ejemplo">
+    <Win7Ventana>
+      <template v-slot:titulo>
+        <span>Una ventana de ejemplo</span>
+      </template>
+      <template v-slot:cuerpo>
+      <div style="padding: 5px; position:relative; height: 200px; overflow: scroll; resize:vertical;">
+        <p></p>
+        <p>Un diálogo:</p>
+        <p>
+          <a href="#dialog-demo">Open Dialog</a>
+          <div class="window active is-bright" id="dialog-demo" role="dialog" aria-labelledby="dialog-title">
+            <div class="title-bar">
+              <div class="title-bar-text" id="dialog-title">Problem Diagnostics</div>
+              <div class="title-bar-controls">
+                <button aria-label="Close" onclick="history.back()"></button>
+              </div>
+            </div>
+            <div class="window-body has-space">
+              <h2 class="instruction instruction-primary">Identifying your problem...</h2>
+              <div role="progressbar" class="marquee"></div>
+            </div>
+            <footer style="text-align: right">
+              <button onclick="history.back()">Cancel</button>
+            </footer>
+          </div>
+        </p>
+        <p>Un árbol:</p>
+        <p>
+          <ul class="tree-view has-collapse-button has-connector has-container">
+            <details open="">
+              <summary>JavaScript</summary>
+              <ul>
+                <li>Avoid at all costs</li>
+                <li>
+                  <details open="">
+                    <summary>Unless</summary>
+                    <ul>
+                      <li>Avoid</li>
+                      <li>
+                        <details open="">
+                          <summary>At</summary>
+                          <ul>
+                            <li>Avoid</li>
+                            <li>At</li>
+                            <li>All</li>
+                            <li>Cost</li>
+                          </ul>
+                        </details>
+                      </li>
+                      <li>All</li>
+                      <li>Cost</li>
+                    </ul>
+                  </details>
+                </li>
+              </ul>
+            </details>
+          </ul>
+        </p>
+        <p>Unas listas:</p>
+        <p>
+          <ul class="tree-view has-container">
+            <li>Table of Contents</li>
+            <li>What is web development?</li>
+            <li>
+              CSS
+              <ul>
+                <li>Selectors</li>
+                <li>Specificity</li>
+                <li>Properties</li>
+              </ul>
+            </li>
+            <li>
+              <details open="">
+                <summary>JavaScript</summary>
+                <ul>
+                  <li>Avoid at all costs</li>
+                  <li>
+                    <details>
+                      <summary>Unless</summary>
+                      <ul>
+                        <li>Avoid</li>
+                        <li>
+                          <details>
+                            <summary>At</summary>
+                            <ul>
+                              <li>Avoid</li>
+                              <li>At</li>
+                              <li>All</li>
+                              <li>Cost</li>
+                            </ul>
+                          </details>
+                        </li>
+                        <li>All</li>
+                        <li>Cost</li>
+                      </ul>
+                    </details>
+                  </li>
+                </ul>
+              </details>
+            </li>
+            <li>HTML</li>
+            <li>Special Thanks</li>
+          </ul>
+        </p>
+        <p>Unas pestañas:</p>
+        <p>
+          <section class="tabs">
+            <menu role="tablist" aria-label="Tabs Template">
+              <button role="tab" aria-controls="tab-A" aria-selected="true">Tab A</button>
+              <button role="tab" aria-controls="tab-B">Tab B</button>
+              <button role="tab" aria-controls="tab-C">Tab C</button>
+              <button role="tab" aria-controls="tab-D" disabled>Tab D</button>
+            </menu>
+            <article role="tabpanel" id="tab-A">Tab A is active</article>
+            <article role="tabpanel" id="tab-B" hidden>Tab B is active</article>
+            <article role="tabpanel" id="tab-C" hidden>Tab C is active</article>
+            <article role="tabpanel" id="tab-D" hidden>Tab D is inactive</article>
+          </section>
+        </p>
+        <p>Un spinner:</p>
+        <p>
+          <span class="loader animate" aria-label="Processing your request"></span>
+        </p>
+        <p>Una barra de progreso:</p>
+        <p>
+          <div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80">
+            <div style="width: 80%"></div>
+          </div>
+        </p>
+        <p>Unos botones simples:</p>
+        <p>
+          <button>Okay</button>
+          <button>Cancel</button>
+        </p>
+      </div>
+      </template>
+      <template v-slot:barra_de_estado>
+        <p class="status-bar-field">Campo 1</p>
+        <p class="status-bar-field">Campo 1</p>
+        <p class="status-bar-field">Campo 1</p>
+      </template>
+    </Win7Ventana>
+  </div>
+}.

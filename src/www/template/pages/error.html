@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <style>
+    html { font-family: Roboto; }
+    html,body { padding: 0; margin: 0; }
+    h1 { padding: 0; margin: 0; }
+    table.error { font-size: 11px; }
+    table.error tr {}
+    table.error tr td { vertical-align: top; }
+    </style>
+</head>
+<body>
+    <h1>Página de error</h1>
+    <div>
+        <table class="error">
+            <tr>
+                <td>Name: </td>
+                <td><%= error.name %></td>
+            </tr>
+            <tr>
+                <td>Message: </td>
+                <td><%= error.message %></td>
+            </tr>
+            <tr>
+                <td>Stack: </td>
+                <td>
+                <%
+                if(process.env.NODE_ENV !== "production") {
+                    const stack_parts = error.stack.split(/\n  +/g);
+                    for(let index = 0; index < stack_parts.length; index++) {
+                        %>
+                        <div style="border-bottom: 1px solid #AAA;"><%-stack_parts[index];%></div>
+                        <%
+                    }
+                }
+                %>
+                </td>
+            </tr>
+    </div>
+</body>
+</html>

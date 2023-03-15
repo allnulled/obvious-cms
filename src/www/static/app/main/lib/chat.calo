@@ -1,0 +1,26 @@
+Exporto módulo universal estándar llamado "app.main.socket.chat" a partir de un hecho donde {
+    creo socket_io como io("http://127.0.0.1:9002").
+    creo socket_io_subscripciones como {}.
+    creo subscribir_a_socket como una función con (nombre, evento_funcion) donde {
+        asigno socket_io_subscripciones[nombre] como evento_funcion.
+    }.
+    creo desubscribir_a_socket como una función con (id) donde {
+        elimino propiedad socket_io_subscripciones[id].
+    }.
+    hago socket_io.on("connect", una función con () donde {
+        imprimo "Socket se conectó!".
+    }).
+    hago socket_io.on("server to client message", una función con (datos) donde {
+        imprimo "Recibidos datos: " + (datos textualizado).
+        itero como objeto socket_io_subscripciones creando constante nombre donde {
+            creo evento_funcion como socket_io_subscripciones[nombre].
+            hago evento_funcion(datos).
+        }.
+    }).
+    retorno {
+        socket: socket_io,
+        subscriptions: socket_io_subscripciones,
+        on: subscribir_a_socket,
+        off: desubscribir_a_socket
+    }.
+}.

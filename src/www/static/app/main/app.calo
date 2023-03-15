@@ -1,0 +1,524 @@
+Ejecutable como documento HTML5
+    con autor allnulled
+    con nombre index
+    con versión 1
+<head>
+    <title>Office</title>
+    <meta charset="utf8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/static/js/calo.js"></script>
+    <script src="/static/vue/vue.draggable/vuedraggable.js"></script>
+    <script src="/static/vue/win7/win7ventana.js"></script>
+    <script src="./lib/comandos/comandos_globales.js"></script>
+    <script src="./lib/comandos/panel_de_autorizaciones.js"></script>
+    <script src="./lib/comandos/panel_de_autorizaciones_segun_usuarios.js"></script>
+    <script src="./lib/comandos/panel_de_autorizaciones_segun_permisos.js"></script>
+    <script src="./lib/comandos/panel_de_autorizaciones_segun_grupos.js"></script>
+    <script src="./lib/comandos/panel_de_autorizaciones_segun_sesiones.js"></script>
+    <style>
+    .landscape_layer_container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #180d22;
+        background-image: url('/static/img/landscape-blured.png');
+        background-position: 50% 100%;
+        background-size: auto auto;
+        background-origin: border-box;
+        background-repeat: no-repeat;
+        z-index: 1;
+    }
+    .landscape_layer {
+        
+    }
+    .win7 .status-bar,
+    .win7 ul.tree-view.has-container,
+    .win7 .window-body {
+      background: rgba(255,255,255,0.5) !important;
+    }
+    .win7 .window {
+      box-shadow: none;
+    }
+
+    .display_none {
+      display: none !important;
+    }
+    .window-body > ul,
+    .window-body > ul > li {
+      margin: 0px;
+      padding: 0px;
+      list-style-type: none;
+    }
+    ul.sugerencias {
+      text-align: right;
+    }
+    ul.sugerencias li {
+      display: inline-block;
+      padding: 3px;
+      text-align: right;
+      border-bottom: 1px solid #CCC;
+      cursor: pointer;
+    }
+    .win7 .window-body {
+      background: #f0f0f0 !important;
+    }
+    .no_break_line {
+      white-space: nowrap;
+    }
+    button.small {
+      min-width: 15px;
+      min-height: 15px;
+      padding: 2px;
+      margin: 0px;
+      font-size: 9px;
+    }
+    button.parte_de_ruta {
+      margin-bottom: 3px;
+    }
+    .small_text {
+      font-size: 10px;
+    }
+    .no_outline {
+      outline: none !important;
+    }
+    .barra_bordeada {
+       border-bottom-left-radius:2pt;
+       border-bottom-right-radius:2pt;
+    }
+    .link {
+      color: blue;
+      cursor: pointer;
+    }
+    .simple_list {
+      list-style-type: none;
+      padding: 0px;
+      margin: 0px;
+    }
+    .simple_list li {
+      list-style-type: none;
+      padding: 0px;
+      margin: 0px;
+    }
+    </style>
+</head>
+<body class="win7"><div id="app"></div></body>.
+
+creo _caracteres_interesantes como {
+    refrescar: "↻",
+    cruz: "⨯",
+    flecha: "▸",
+    menu: "☰"
+}.
+
+creo filtros como {
+  filtro_para_ignorar_propiedades_con_$: una función con (item) donde retorno no item.startsWith("$"),
+  mapeo_para_obtener_todo_el_string: una función con (coincidentes, componente) donde {
+    retorno una función con (item) donde {
+      creo busqueda_resultante como (cuando coincidentes.length entonces (coincidentes.join(" ") + " ") si no "") + item.
+      retorno {
+        text: item,
+        onClick: una función donde {
+          hago componente.cambiar_texto_de_busqueda(busqueda_resultante).
+        }
+      }.
+    }.
+  }
+}.
+
+creo Win7AplicacionUniversal como un componente vue2 con nombre "Win7AplicacionUniversal" con plantilla {
+  <div class="Win7AplicacionUniversal Component">
+    <div>
+        <div class="window">
+          <table>
+            <tr>
+              <td style="width:100%;">
+                <input class="small_text" style="width:100%; font-size:10px;" type="text" v-model="texto_de_busqueda" placeholder="ayuda" />
+              </td>
+              <td style="width:auto;">
+                <button class="no_outline" style="min-width: 35px;" v-if="!esta_mostrando_sugerencias" v-on:click="() => alternar_mostrar_sugerencias()"> ☰ </button>
+                <button class="no_outline active" style="min-width: 35px;" v-else v-on:click="() => alternar_mostrar_sugerencias()"> ☰ </button>
+              </td>
+            </tr>
+          </table>
+          <template v-if="esta_mostrando_sugerencias">
+            <div class="window-body" style="margin-top: 5px; padding-top: 3px; padding-right: 3px; padding-left: 3px;">
+              <div class="" style="display: inline-block; width: 100%; text-align: right; padding-bottom: 0px;">
+                <button class="small parte_de_ruta" data-busqueda="" v-on:click="() => cambiar_texto_de_busqueda('')"> @ </button>
+                <span v-for="(parte_de_ruta, parte_de_ruta_index) in ruta_de_busqueda" v-bind:key="'ruta_de_busqueda_' + parte_de_ruta_index">
+                  <span class="small_text"> » </span>
+                  <button class="small no_outline parte_de_ruta" :data-busqueda="parte_de_ruta.link" v-on:click="() => cambiar_texto_de_busqueda(parte_de_ruta.link)">{{ parte_de_ruta.text }}</button>
+                </span>
+              </div>
+            </div>
+            <div class="window-body" style="margin-top: 5px;">
+              <ul class="sugerencias">
+                <template v-for="(sugerencia, sugerencia_index) in sugerencias">
+                  <template v-if="typeof sugerencia === 'string'">
+                    <li v-bind:key="'sugerencia-' + sugerencia_index">
+                      <button class="small no_outline" v-on:click="() => cambiar_texto_de_busqueda(sugerencia)">{{ sugerencia }}</button>
+                    </li>
+                  </template>
+                  <template v-else-if="typeof sugerencia === 'object'">
+                    <li v-bind:key="'sugerencia-' + sugerencia_index">
+                      <button class="small no_outline" :class="{default: sugerencia.especial}" v-on:click="sugerencia.onClick">{{ sugerencia.text }}</button>
+                    </li>
+                  </template>
+                </template>
+              </ul>
+            </div>
+          </template>
+        </div>
+        <div v-if="esta_visualizando && typeof visualizando_componente_name !== 'undefined'" style="margin-top:6px;">
+          <component :is="visualizando_componente_name" v-bind="visualizando_componente_props" v-on="visualizando_componente_events"></component>
+        </div>
+    </div>
+  </div>
+} con lógica {
+  retorno {
+    propiedad props como {
+      aplicacion: {
+        propiedad type como Object.
+        propiedad default como una función donde retorno {}.
+      }
+    }.
+    método data donde {
+      retorno {
+        ruta: "/",
+        esta_visualizando: false,
+        visualizando_componente_name: undefined,
+        visualizando_componente_props: {},
+        visualizando_componente_events: {},
+        texto_de_busqueda: "",
+        ruta_de_busqueda: "",
+        esta_mostrando_sugerencias: false,
+        sugerencias: Object.keys(this.aplicacion)
+      }.
+    }.
+    propiedad methods como {
+      método visualizar_componente con (name, bind_args o en su defecto {}, on_args o en su defecto {}) donde {
+        asigno this.esta_visualizando como false.
+        asigno this.visualizando_componente_name como name.
+        asigno this.visualizando_componente_props como bind_args.
+        asigno this.visualizando_componente_events como on_args.
+        asigno this.esta_visualizando como true.
+      }.
+      método alternar_mostrar_sugerencias donde {
+        asigno this.esta_mostrando_sugerencias como no this.esta_mostrando_sugerencias.
+      }.
+      método cambiar_texto_de_busqueda con (otro_texto) donde {
+        asigno this.texto_de_busqueda como otro_texto.
+      }.
+    }.
+    propiedad watch como {
+      método texto_de_busqueda con (nuevo_valor) donde {
+        asigno this.esta_mostrando_sugerencias como false.
+        creo partes como nuevo_valor.split(una nueva RegExp("\\.| ", "g")).filter(una función con (item) donde retorno item no es igual que "").
+        creo coincidentes como [].
+        creo variable ultimo_valor como this.aplicacion.
+        intento donde {
+          desde 0 hasta partes.length {
+            creo parte como partes[index].
+            si ultimo_valor no contiene clave parte lanzo un nuevo Error("No hay más coincidencias").
+            asigno ultimo_valor como ultimo_valor[parte].
+            apendizo parte en coincidentes.
+          }.
+        } en errores {}.
+        asigno this.sugerencias_pivote como ultimo_valor.
+        en proceso actualizando_sugerencias {
+          si ultimo_valor no contiene clave "$ejecutar" {
+            asigno this.sugerencias como Object.keys(ultimo_valor).map(filtros.mapeo_para_obtener_todo_el_string(coincidentes, this)).
+          } y si no {
+            creo variable opciones_disponibles como [].
+            si ultimo_valor.$ejecutar es tipo función apendizo {
+              propiedad text como " ▸ ejecutar".
+              propiedad especial como true.
+              propiedad onClick como una lambda donde {
+                retorno ultimo_valor.$ejecutar(this).
+              }.
+            } en opciones_disponibles.
+            si ultimo_valor.$visualizar es tipo función apendizo {
+              propiedad text como " ↻ visualizar".
+              propiedad especial como true.
+              propiedad onClick como una lambda donde {
+                si ultimo_valor.$cargar_componente es tipo función {
+                  hago ultimo_valor.$cargar_componente(this).
+                }.
+                retorno ultimo_valor.$visualizar(this).
+              }.
+            } en opciones_disponibles.
+            asigno opciones_disponibles como opciones_disponibles concatenado por Object.keys(ultimo_valor)
+            .filter(filtros.filtro_para_ignorar_propiedades_con_$)
+            .map(filtros.mapeo_para_obtener_todo_el_string(coincidentes, this)).
+            asigno this.sugerencias como opciones_disponibles.
+          }.
+        }.
+        en proceso actualizando_estado {
+          creo elementos_en_texto como partes.
+          creo elementos_de_ruta como [].
+          desde 0 hasta elementos_en_texto.length {
+            creo elemento como elementos_en_texto[index].
+            apendizo {
+              text: elemento,
+              link: ([] concatenado por elementos_en_texto).slice(0, index + 1).join(" ")
+            } en elementos_de_ruta.
+          }.
+          asigno this.ruta_de_busqueda como elementos_de_ruta.
+        }.
+        asigno this.esta_mostrando_sugerencias como true.
+      }.
+    }.
+  }.
+}.
+
+asigno window.comandos_globales.ops como {
+  listar_usuarios: {
+    método $ejecutar con (componente) donde {
+      imprimo "ejecutar".
+    }.
+    método $cargar_componente con (componente) donde {}.
+    método $visualizar con (componente) donde {}.
+  },
+  crear_usuarios: {
+    método $ejecutar con (componente) donde {
+      imprimo "ejecutar".
+    }.
+    método $cargar_componente con (componente) donde {}.
+    método $visualizar con (componente) donde {}.
+  },
+  actualizar_usuarios: {
+    método $ejecutar con (componente) donde {
+      imprimo "ejecutar".
+    }.
+    método $cargar_componente con (componente) donde {}.
+    método $visualizar con (componente) donde {}.
+  },
+  eliminar_usuarios: {
+    método $ejecutar con (componente) donde {
+      imprimo "ejecutar".
+    }.
+    método $cargar_componente con (componente) donde {}.
+    método $visualizar con (componente) donde {}.
+  }
+}.
+
+[*
+creo x como una ejecución de aplicación universal
+  basada en app_universal_1
+  con comando "os ficheros leer fichero a texto sinc"
+  con parámetros [
+    ítem "ruta.txt"
+    ítem {mode:"a"}
+  ],
+@Sección usando app universal por defecto: Castelog.variables.aplicacion_universal_por_defecto.
+creo xx como @("os ficheros leer fichero a texto sinc", "uta.txt", {mode:"a"}).
+@Sección usando app universal parametrizada.
+creo xx como @app_universañ_1:("os ficheros leer fichero a texto sinc", "uta.txt", {mode:"a"}).
+@Sección usando app universal asíncronamente.
+creo xx como ~@("os ficheros leer fichero a texto sinc", "uta.txt", {mode:"a"}).
+@Sección usando app universal con shortcut peligroso.
+creo xx como ~@¡ os ficheros leer fichero a texto sinc: "uta.txt", {mode:"a"} !@.
+creo xx como ~@¡ os identificacion imprimir !@.
+creo zz como @¿~
+    ~@¡ paso uno !@.
+    ~@¡ paso dos !@.
+    ~@¡ paso tres !@.
+    retorno this.
+  ?@.
+creo zz1 como @¡/zz: 1!@.
+creo zz1 como @¡/zz: 2!@.
+creo zz1 como @¡/zz: 3!@.
+
+creo sumar =: param1,param2 >>> param1 + param2.
+creo restar =: param1,param2 >>> param1 + param2.
+: param1,param2 >>> param1 + param2.
+: param1,param2 >>> {}.
+creo contenido como ~@("kernel leer fichero txt", "fichero.txt").
+creo plugins como ~@("kernel leer directorio", "plugins").
+desdee 0 hasta plugins.length {
+  creo plugin como ~@("kernel leer fichero json", plugins[index]).
+  creo name como ~@("kernel accedo variable", plugin, "name", "0.0.1").
+  creo version como ~@("kernel accedo variable", plugin, "version", "0.0.1").
+}.
+*]
+
+
+creo app_universal_1 como una aplicación sintáctica universal con {
+
+  os: {
+    ficheros: {
+      leer: {
+        carpeta: window.comandos_globales.ops.eliminar_usuario,
+        fichero: window.comandos_globales.ops.eliminar_usuario
+      },
+      escribir: {
+        carpeta: window.comandos_globales.ops.eliminar_usuario,
+        fichero: window.comandos_globales.ops.eliminar_usuario
+      }
+    }
+  },
+  cms: {
+    panel: {
+      de: {
+        autorizaciones: {} extendido por window.comandos_globales.panel_de_autorizaciones también extendido por {
+          segun: {
+            usuarios: {} extendido por window.comandos_globales.panel_de_autorizaciones_segun_usuarios también extendido por {
+              listar: window.comandos_globales.ops.listar_usuarios,
+              crear: {
+                usuario: window.comandos_globales.ops.crear_usuario
+              },
+              actualizar: {
+                usuario: window.comandos_globales.ops.actualizar_usuario
+              },
+              eliminar: {
+                usuario: window.comandos_globales.ops.eliminar_usuario
+              },
+              agrupar: {
+                usuario: window.comandos_globales.ops.eliminar_usuario
+              },
+              desagrupar: {
+                usuario: window.comandos_globales.ops.eliminar_usuario
+              },
+              permitir: {
+                usuario: window.comandos_globales.ops.eliminar_usuario
+              },
+              despermitir: {
+                usuario: window.comandos_globales.ops.eliminar_usuario
+              }
+            },
+            grupos: {} extendido por window.comandos_globales.panel_de_autorizaciones_segun_grupos también extendido por {
+              listar: window.comandos_globales.ops.listar_usuarios,
+              crear: {
+                grupo: window.comandos_globales.ops.crear_grupo
+              },
+              actualizar: {
+                grupo: window.comandos_globales.ops.actualizar_grupo
+              },
+              eliminar: {
+                grupo: window.comandos_globales.ops.eliminar_grupo
+              },
+              agrupar: {
+                grupo: window.comandos_globales.ops.eliminar_grupo
+              },
+              desagrupar: {
+                grupo: window.comandos_globales.ops.eliminar_grupo
+              },
+              permitir: {
+                grupo: window.comandos_globales.ops.eliminar_grupo
+              },
+              despermitir: {
+                grupo: window.comandos_globales.ops.eliminar_grupo
+              }
+            },
+            permisos: {} extendido por window.comandos_globales.panel_de_autorizaciones_segun_permisos también extendido por {
+              listar: window.comandos_globales.ops.listar_usuarios,
+              crear: {
+                permiso: window.comandos_globales.ops.crear_permiso
+              },
+              actualizar: {
+                permiso: window.comandos_globales.ops.actualizar_permiso
+              },
+              eliminar: {
+                permiso: window.comandos_globales.ops.eliminar_permiso
+              },
+              agrupar: {
+                permiso: window.comandos_globales.ops.eliminar_permiso
+              },
+              desagrupar: {
+                permiso: window.comandos_globales.ops.eliminar_permiso
+              },
+              permitir: {
+                permiso: window.comandos_globales.ops.eliminar_permiso
+              },
+              despermitir: {
+                permiso: window.comandos_globales.ops.eliminar_permiso
+              }
+            },
+            sesiones: {} extendido por window.comandos_globales.panel_de_autorizaciones_segun_sesiones también extendido por {
+              listar: window.comandos_globales.ops.listar_usuarios,
+              crear: {
+                sesion: window.comandos_globales.ops.crear_sesion
+              },
+              actualizar: {
+                sesion: window.comandos_globales.ops.actualizar_sesion
+              },
+              eliminar: {
+                sesion: window.comandos_globales.ops.eliminar_sesion
+              },
+              agrupar: {
+                sesion: window.comandos_globales.ops.eliminar_sesion
+              },
+              desagrupar: {
+                sesion: window.comandos_globales.ops.eliminar_sesion
+              },
+              permitir: {
+                sesion: window.comandos_globales.ops.eliminar_sesion
+              },
+              despermitir: {
+                sesion: window.comandos_globales.ops.eliminar_sesion
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  ayuda: un punto sintáctico universal con una función donde retorno {
+    $id: "ayuda",
+    $componente: "PanelDeAyuda"
+  }
+}.
+
+
+creo PaginaDeInicio como un componente vue2 con nombre "PaginaDeInicio" con plantilla {
+  <div class="PaginaDeInicio Component">
+    <div style="padding: 2px; z-index:9999;">
+      <Win7AplicacionUniversal :aplicacion="aplicacion" />
+    </div>
+  </div>
+} con lógica {
+  retorno {
+    método data donde {
+      retorno {
+        propiedad aplicacion como app_universal_1.comandos.
+      }.
+    }.
+    propiedad methods como {}.
+    propiedad watch como {}.
+    método beforeMount donde {}.
+    método mounted donde {}.
+  }.
+}.
+
+creo App como una aplicación vue2 con nombre "App" con rutas [{
+    propiedad path como "/".
+    propiedad name como "Home".
+    propiedad component como PaginaDeInicio.
+    propiedad props como {}.
+}] con traducciones {
+    propiedad es como {}.
+    propiedad en como {}.
+    propiedad ca como {}.
+} con plantilla {
+  <div class="App Component Castelog-app">
+    <router-view></router-view>
+  </div>
+} con estilos {
+    html {}
+    body {}
+    .Component {}
+    .App {}
+} con lógica {
+  retorno {
+    método data donde {
+      retorno {
+        
+      }.
+    }.
+    propiedad methods como {}.
+    propiedad watch como {}.
+    método beforeMount donde {}.
+    método mounted donde {}.
+  }.
+} montada en "#app".

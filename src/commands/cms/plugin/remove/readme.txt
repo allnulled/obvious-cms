@@ -1,0 +1,1 @@
+elimina un plugin del registro local.

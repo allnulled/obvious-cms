@@ -1,0 +1,27 @@
+asigno window.comandos_globales.panel_de_autorizaciones_segun_permisos como {
+    método $ejecutar con (componente) donde {
+      imprimo "ejecutar".
+    }.
+    método $cargar_componente con (componente) donde {
+      si vue.options.components contiene clave "PanelDeAutorizacionesSegunPermisos" {
+        retorno true.
+      }.
+      hago un componente vue2 con nombre "PanelDeAutorizacionesSegunPermisos" con plantilla {
+        <div class="PanelDeAutorizacionesSegunPermisos Component">
+          <div class="window">
+            <div class="title-bar">
+              <div class="title-bar-text">panel de autorizaciones según permisos</div>
+            </div>
+            <div class="window-body">
+              Por permisos se vería aquí
+            </div>
+          </div>
+        </div>
+      }.
+      retorno false.
+    }.
+    método $visualizar con (componente) donde {
+      imprimo "visualizar".
+      hago componente.visualizar_componente("PanelDeAutorizacionesSegunPermisos", { app: componente }, {}).
+    }.
+}.

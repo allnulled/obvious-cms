@@ -1,0 +1,7 @@
+{
+  "name": "Some random controller",
+  "method": "USE",
+  "path": "^/some/random/path",
+  "middleware_source": "(function () {\n        return []\n    })()",
+  "controller_source": "(function () {\n        return function (request, response, next) {\n            response.json({ message: \"OK!\" });\n        }\n    })()"
+}

@@ -1,0 +1,1 @@
+lista los market de plugins conocidos por el registro local.

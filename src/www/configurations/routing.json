@@ -1,0 +1,79 @@
+[
+    {
+        "name": "(nativo) Pagina de inicio",
+        "method": "GET",
+        "path": "^/$",
+        "middleware_source": "[]",
+        "controller_source": "this.api.server.controller.template.file(__dirname + '/www/template/index.html')"
+    },
+    {
+        "name": "(nativo) Servicio de plantillas estaticas",
+        "method": "USE",
+        "path": "^/page",
+        "middleware_source": "[]",
+        "controller_source": "this.api.server.controller.template.folder(__dirname + '/www/template')"
+    },
+    {
+        "name": "(nativo) Servicio de recursos estaticos",
+        "method": "USE",
+        "path": "^/static/1",
+        "middleware_source": "[]",
+        "controller_source": "(req,res) => { console.log('okkkk'); res.write(JSON.stringify({ message: 'ok' })); res.end(); }"
+    },
+    {
+        "name": "(nativo) Servicio de recursos estaticos",
+        "method": "USE",
+        "path": "^/static",
+        "middleware_source": "[]",
+        "controller_source": "this.api.server.controller.static.folder(__dirname + '/www/static')"
+    },
+    {
+        "name": "(nativo) Servicio de descargas estaticas",
+        "method": "USE",
+        "path": "^/download",
+        "middleware_source": "[]",
+        "controller_source": "this.api.server.controller.download.folder(__dirname + '/www/download')"
+    },
+    {
+        "name": "(nativo) Controlador para login",
+        "method": "USE",
+        "path": "^/authentication/login",
+        "middleware_source": "[]",
+        "controller_source": "this.api.server.controller.auth.login()"
+    },
+    {
+        "name": "(nativo) Controlador para logout",
+        "method": "USE",
+        "path": "^/authentication/logout",
+        "middleware_source": "[]",
+        "controller_source": "this.api.server.controller.auth.logout()"
+    },
+    {
+        "name": "(nativo) Controlador para JSON de www/configurations/routing.json",
+        "method": "USE",
+        "path": "^/administration/routing",
+        "middleware_source": "[this.api.server.middleware.authorize.only.permissions(['to administrate'])]",
+        "controller_source": "this.api.server.controller.storage.by.json.file(__dirname + '/www/configurations/routing.json')"
+    },
+    {
+        "name": "(nativo) Controlador para JSON de www/configurations/authorization.json",
+        "method": "USE",
+        "path": "^/administration/authorization",
+        "middleware_source": "[this.api.server.middleware.authorize.only.permissions(['to administrate'])]",
+        "controller_source": "this.api.server.controller.storage.by.json.file(__dirname + '/www/configurations/authorization.json')"
+    },
+    {
+        "name": "(nativo) Controlador de errores por defecto",
+        "method": "USE",
+        "path": "*",
+        "middleware_source": "[]",
+        "controller_source": "this.api.server.controller.error.template()"
+    },
+    {
+        "name": "(nativo) Controlador de ruta por defecto",
+        "method": "USE",
+        "path": "*",
+        "middleware_source": "[]",
+        "controller_source": "this.api.server.controller.template.file(__dirname + '/www/template/pages/error.html', { error: new Error('Page nout found error') })"
+    }
+]

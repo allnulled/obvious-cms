@@ -1,0 +1,1 @@
+añade un market de plugins en el registro local.

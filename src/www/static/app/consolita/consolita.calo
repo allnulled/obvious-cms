@@ -1,0 +1,664 @@
+Ejecutable como documento HTML5
+    con autor allnulled
+    con nombre index
+    con versión 1
+<head>
+    <title>CMS main app</title>
+    <meta charset="utf8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/static/js/calo.js"></script>
+    <link rel="stylesheet" href="/page/styles/7.css" />
+    <link rel="stylesheet" href="/page/styles/framework.css" />
+    <link rel="stylesheet" href="/page/styles/theme.css" />
+    <link rel="stylesheet" href="/page/styles/custom.css" />
+    <script src="/static/js/socket.io-client.js"></script>
+    <script src="./lib/chat.js"></script>
+    <script src="/static/vue/vuedraggable.js"></script>
+
+    <style>
+      .menu[role="tablist"] button {
+          padding: 2px !important;
+      }
+      textarea {
+          font-size: 9px !important;
+      }
+      [role="tabpanel"] {
+          padding: 8px;
+      }
+      ul,ul li {
+          padding: 0px;
+          margin: 0px;
+      }
+      ul {
+          padding-left: 5px;
+      }
+      .bordeado_1 {
+          border: 1px solid #888;
+      }
+      [role="tabpanel"] {
+          margin-bottom: 0px;
+      }
+      table {
+          border-collapse: collapse;
+          width: 100%;
+      }
+      table td,
+      table td > button,
+      table td > button > span {
+          vertical-align: top;
+      }
+      table td .title-bar {
+          vertical-align: middle;
+      }
+      table td > button,
+      table td > button > span {
+          display: inline-block;
+      }
+      button.boton_de_multiconsola,
+      button.boton_de_multiconsola > span {
+          font-size: 10px;
+          padding-bottom: 0px;
+      }
+      button.boton_de_multiconsola > span {
+          min-width: 10px;
+      }
+      button.boton_de_multiconsola_de_barra_invisible {
+          min-width:6px;
+          min-height:18px;
+          padding-left:4px;
+          padding-right:4px;
+          font-size:10px;
+          opacity: 0.5;
+      }
+      .title-bar {
+          padding: 2px;
+          margin: 0px;
+      }
+      .window-body {
+          padding: 2px;
+          margin: 2px;
+      }
+      div.barra_invisible_de_multiconsola {
+           position:absolute;
+           top: 2px;
+           bottom: auto;
+           right: 2px;
+           padding: 2px;
+           padding-top:2px;
+           background-color: transparent;
+      }
+      .entrada_de_comandos_principal {
+          min-width: auto;
+          width: 100%;
+          resize: vertical;
+          height: auto;
+          font-size: 10px !important;
+          padding-top: 4px;
+      }
+      .panel_de_botones_de_multiconsola_1 {
+          width: auto;
+      }
+      .boton_de_multiconsola {
+          min-width: 28px;
+          padding-top: -2px;
+          padding-bottom: 0px;
+          padding-left: 4px;
+          padding-right: 4px;
+          white-space: nowrap;
+      }
+      button.boton_de_multiconsola > span,
+      button.boton_de_multiconsola > div > span {
+          font-size: 10px !important;
+      }
+      .window {
+          box-shadow: 0 0 0 transparent;
+      }
+
+      .secondary_window {
+          margin-top:2px;
+      }
+      .ms_entrada_texto_multilinea {
+          width: 100%;
+          resize: vertical;
+      }
+    </style>
+</head>
+<body><div id="app"></div></body>.
+
+@Sección línea de guía de estilos:
+
+[*
+
+Los botones del texto de comandos:
+  - se pliegan/despliegan conforme a un botón con trigram.
+  - se disponen verticalmente bajo el botón que los despliega.
+  - el botón que los despliega:
+    - está a la derecha arriba fijo superpuesto
+    - está superpuesto
+    - mantiene un estado propio de marcado/no marcado en función de si están desplegados o no hago no.
+
+
+
+*]
+
+importo módulo universal estándar llamado "app.main.socket.chat" creando constante chat en errores lanzo error.
+
+creo MsBoton como un componente vue2 con nombre "MsBoton" con plantilla {
+    <button>
+        <slot></slot>
+    </button>
+} con lógica {
+    retorno {
+        propiedad props como {
+
+        }.
+        método data donde {
+            retorno {
+                
+            }.
+        }.
+    }.
+}.
+
+
+creo MsComandoUniversal como un componente vue2 con nombre "MsComandoUniversal" con plantilla {
+    <div style="padding-left: 2px; padding-right: 4px; min-width: 150px;">
+        <div class="window active" style="width: 100%; text-align: left;">
+            <div class="title-bar">
+                <table style="width:100%; border-collapse: collapse;">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <MsBoton class="boton_de_multiconsola" title="Visualizar">
+                                    <span data-alt-chars="☰○"> ☰ </span>
+                                </MsBoton>
+                            </td>
+                            <td style="width:100%;vertical-align:middle;position:relative;">
+                                <div>
+                                    <MsEntradaTexto class="entrada_de_comandos_principal" :ambito="this" clave="texto_de_busqueda" style="padding-top: 4px;" placeholder="comando"></MsEntradaTexto>
+                                </div>
+                            </td>
+                            <td>
+                                <MsBoton class="boton_de_multiconsola" title="Configuraciones">
+                                    <span>⚙</span>
+                                </MsBoton>
+                            </td>
+                            <td>
+                                <MsBoton class="boton_de_multiconsola" title="Ejecutar">
+                                    <span>▶</span>
+                                </MsBoton>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="window-body" style="display: none;">
+                <table style="width:100%; border-collapse: collapse;">
+                    <tbody>
+                        <tr v-for="(sugerencia, sugerencia_index) in sugerencias" v-bind:key="'comando-universañ-' + uuid + '-sugerencia-' + sugerencia_index">
+                            <td style="width:100%">
+                                {{ sugerencia.valor }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="window active secondary_window" style="width: 100%; text-align: left;">
+            <div class="title-bar">
+                <div class="title-bar-text">sección de panel rápido</div>
+            </div>
+        </div>
+        <div class="window active secondary_window" style="width: 100%; text-align: left;">
+            <div class="title-bar">
+                <table style="" class="panel_de_botones_de_multiconsola_1">
+                    <tbody>
+                        <tr>
+                            <td style="position:relative; width:20%;">
+                                <MsBoton class="boton_de_multiconsola" title="Sugerir" style="width:100%;">
+                                    <SoloReloj>
+                                        <span>...</span>
+                                    </SoloReloj>
+                                    <SoloMovil>
+                                        <span>...</span>
+                                    </SoloMovil>
+                                    <SoloTablet>
+                                        <span>... sugerir</span>
+                                    </SoloTablet>
+                                    <SoloOrdenador>
+                                        <span>... sugerir</span>
+                                    </SoloOrdenador>
+                                    <SoloTelevision>
+                                        <span>... sugerir</span>
+                                    </SoloTelevision>
+                                    <SoloProyector>
+                                        <span>... sugerir</span>
+                                    </SoloProyector>
+                                </MsBoton>
+                            </td>
+                            <td style="position:relative; width:20%;">
+                                <MsBoton class="boton_de_multiconsola" title="Limpiar" style="width:100%;">
+                                    <SoloReloj>
+                                        <span> ⨯ </span>
+                                    </SoloReloj>
+                                    <SoloMovil>
+                                        <span> ⨯ </span>
+                                    </SoloMovil>
+                                    <SoloTablet>
+                                        <span> ⨯ limpiar</span>
+                                    </SoloTablet>
+                                    <SoloOrdenador>
+                                        <span> ⨯ limpiar</span>
+                                    </SoloOrdenador>
+                                    <SoloTelevision>
+                                        <span> ⨯ limpiar</span>
+                                    </SoloTelevision>
+                                    <SoloProyector>
+                                        <span> ⨯ limpiar</span>
+                                    </SoloProyector>
+                                </MsBoton>
+                            </td>
+                            <td style="position:relative; width:20%;">
+                                <MsBoton class="boton_de_multiconsola" title="Anterior" style="width:100%;" data-fullchar="◀◁">
+                                    <SoloReloj>
+                                        <span> « </span>
+                                    </SoloReloj>
+                                    <SoloMovil>
+                                        <span> « </span>
+                                    </SoloMovil>
+                                    <SoloTablet>
+                                        <span> « anterior</span>
+                                    </SoloTablet>
+                                    <SoloOrdenador>
+                                        <span> « anterior</span>
+                                    </SoloOrdenador>
+                                    <SoloTelevision>
+                                        <span> « anterior</span>
+                                    </SoloTelevision>
+                                    <SoloProyector>
+                                        <span> « anterior</span>
+                                    </SoloProyector>
+                                </MsBoton>
+                            </td>
+                            <td style="position:relative; width:20%;">
+                                <MsBoton class="boton_de_multiconsola" title="Posterior" style="width:100%;" data-fullchar="▶▷">
+                                    <SoloReloj>
+                                        <span> » </span>
+                                    </SoloReloj>
+                                    <SoloMovil>
+                                        <span> » </span>
+                                    </SoloMovil>
+                                    <SoloTablet>
+                                        <span> » posterior</span>
+                                    </SoloTablet>
+                                    <SoloOrdenador>
+                                        <span> » posterior</span>
+                                    </SoloOrdenador>
+                                    <SoloTelevision>
+                                        <span> » posterior</span>
+                                    </SoloTelevision>
+                                    <SoloProyector>
+                                        <span> » posterior</span>
+                                    </SoloProyector>
+                                </MsBoton>
+                            </td>
+                            <td style="position:relative; width:20%;">
+                                <MsBoton class="boton_de_multiconsola" title="Visualizar" style="width:100%;" data-fullchar="☰○">
+                                    <SoloReloj>
+                                        <span> ● </span>
+                                    </SoloReloj>
+                                    <SoloMovil>
+                                        <span> ● </span>
+                                    </SoloMovil>
+                                    <SoloTablet>
+                                        <span> ● ver</span>
+                                    </SoloTablet>
+                                    <SoloOrdenador>
+                                        <span> ● ver</span>
+                                    </SoloOrdenador>
+                                    <SoloTelevision>
+                                        <span> ● ver</span>
+                                    </SoloTelevision>
+                                    <SoloProyector>
+                                        <span> ● ver</span>
+                                    </SoloProyector>
+                                </MsBoton>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="window active secondary_window" style="width: 100%; text-align: left;">
+            <div class="title-bar">
+                <div class="title-bar-text">sección de parámetros de función</div>
+            </div>
+        </div>
+        <div style="width: 100%; text-align: left;" class="window active secondary_window" v-for="(parametro, parametro_index) in parametros_de_comando" v-bind:key="'consola-universal-uuid-' + uuid + '-parametro-de-comando-' + parametro_index">
+            <table style="width:100%; border-collapse: collapse;">
+                <tbody>
+                    <tr>
+                        <td style="position:relative; width:100%;" colspan="1" v-bind:key="'consola-universal-uuid-' + uuid + '-parametro-de-comando-' + parametro_index + '-texto-de-comando'">
+                            <div class="title-bar-text" style="padding:4px;box-sizing:border-box;">
+                                <span style="display:inline-block;">argumento {{ parametro_index + 1 }}: </span>
+                                <MsBoton class="boton_de_multiconsola" title="eliminar parámetro" style="width:auto; float: right;" v-on:click.native="() => eliminar_parametro_de_comando(parametro_index)" v-bind:key="'consola-universal-uuid-' + uuid + '-parametro-de-comando-' + parametro_index + '-boton-eliminar'">
+                                    <span>eliminar</span>
+                                </MsBoton>
+                            </div>
+                            <MsEntradaTextoMultilinea class="entrada_de_comandos_principal" style="" placeholder="código aquí" :value="parametros_de_comando[parametro_index]" :on-change="x => cambiar_parametro(parametro_index, x)" :ref="'argumento_para_comando_' + parametro_index"></MsEntradaTextoMultilinea>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="width: 100%; text-align: left;"  class="window active secondary_window">
+            <table style="width:100%; border-collapse: collapse;">
+                <tbody>
+                    <tr>
+                        <td style="position:relative; width:auto;">
+                            <MsBoton class="boton_de_multiconsola" title="añadir parámetro" style="width:100%;" v-on:click.native="agregar_parametros_de_comando">
+                                <SoloReloj>
+                                    <span> + añadir</span>
+                                </SoloReloj>
+                                <SoloMovil>
+                                    <span> + añadir</span>
+                                </SoloMovil>
+                                <SoloTablet>
+                                    <span> + añadir</span>
+                                </SoloTablet>
+                                <SoloOrdenador>
+                                    <span> + añadir</span>
+                                </SoloOrdenador>
+                                <SoloTelevision>
+                                    <span> + añadir</span>
+                                </SoloTelevision>
+                                <SoloProyector>
+                                    <span> + añadir</span>
+                                </SoloProyector>
+                            </MsBoton>
+                        </td>
+                        <td style="position:relative; width:100%;">
+                            <MsBoton class="boton_de_multiconsola" title="guardar parámetros" style="width:100%;">
+                                <SoloReloj>
+                                    <span> ✔ guardar</span>
+                                </SoloReloj>
+                                <SoloMovil>
+                                    <span> ✔ guardar</span>
+                                </SoloMovil>
+                                <SoloTablet>
+                                    <span> ✔ guardar</span>
+                                </SoloTablet>
+                                <SoloOrdenador>
+                                    <span> ✔ guardar</span>
+                                </SoloOrdenador>
+                                <SoloTelevision>
+                                    <span> ✔ guardar</span>
+                                </SoloTelevision>
+                                <SoloProyector>
+                                    <span> ✔ guardar</span>
+                                </SoloProyector>
+                            </MsBoton>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="window active secondary_window" style="width: 100%; text-align: left;">
+            <div class="title-bar">
+                <div class="title-bar-text">sección de llamada de función</div>
+            </div>
+        </div>
+        <div style="width: 100%; text-align: left;" class="window active secondary_window">
+            <div style="padding-left: 2px; padding-right: 2px;">
+                <MsEntradaTextoMultilinea :ambito="self" clave="salida_de_funcion"></MsEntradaTextoMultilinea>
+            </div>
+        </div>
+    </div>
+} con lógica {
+    retorno {
+        propiedad props como {
+            propiedad uuid como {
+                propiedad type como String.
+                propiedad default como una función donde retorno un texto aleatorio de 10 caracteres.
+            }.
+            propiedad esRaiz como {
+                propiedad type como Boolean.
+                propiedad default como una función donde retorno true.
+            }.
+            propiedad comandos como {
+                propiedad type como Object.
+                propiedad default como una función donde retorno {}.
+            }.
+        }.
+        método data donde {
+            retorno {
+                propiedad self como this.
+                propiedad texto_de_busqueda como "".
+                propiedad parametros_de_comando como [].
+                propiedad sugerencias como [].
+                propiedad salida_de_funcion como "".
+            }.
+        }.
+        propiedad methods como {
+            método agregar_parametros_de_comando donde {
+                asigno this.parametros_de_comando como [].concat(this.parametros_de_comando, [{
+                    propiedad codigo como "".
+                }]).
+                hago this.$forceUpdate(true).
+            }.
+            método cambiar_parametro con (indice, valor) donde {
+                imprimo "cambiar parametro:".
+                imprimo indice.
+                imprimo valor.
+                asigno this.parametros_de_comando[indice].codigo como valor.
+                imprimo this.parametros_de_comando.
+                hago this.$forceUpdate(true).
+            }.
+            método eliminar_parametro_de_comando con (indice) donde {
+                imprimo this.parametros_de_comando.
+                creo resultado como  [].concat(this.parametros_de_comando).
+                hago resultado.splice(indice, 1).
+                asigno this.parametros_de_comando como resultado.
+                imprimo "resultado".
+                imprimo resultado.
+                imprimo "parametros_de_comando".
+                imprimo this.parametros_de_comando.
+                hago this.$forceUpdate(true).
+            }.
+        }.
+        propiedad watch como {
+            método texto_de_busqueda con (nuevo_valor) donde {
+                creo sugerencias_formato_1 como nuevo_valor.split(una nueva RegExp("\\.| ", "g")).
+                creo sugerencias_formato_2 como un conjunto de claves del objeto sugerencias_formato_1 reducido desde [] donde {
+                    si output no contiene clave item {
+                        hago output.push({
+                            nombre: item,
+                            valor: sugerencias_formato_1[item]
+                        }).
+                    }.
+                    retorno output.
+                }.
+                imprimo nuevo_valor.
+                imprimo sugerencias_formato_1.
+                imprimo sugerencias_formato_2.
+                creo sugerencias_formato_final como sugerencias_formato_1.
+                asigno this.sugerencias como sugerencias_formato_final.
+            }.
+        }.
+        método mounted donde {
+            asigno this.sugerencias como un conjunto de claves del objeto this.comandos.
+        }.
+    }.
+}.
+
+creo MsEntradaTextoMultilinea como un componente vue2 con nombre "MsEntradaTextoMultilinea" con plantilla {
+    <textarea class="ms_entrada_texto_multilinea" v-model="internal_value" />
+} con lógica {
+    retorno {
+        propiedad props como {
+            propiedad valorInicial como {
+                propiedad type como String.
+                propiedad default como una función donde retorno "".
+            }.
+            propiedad onChange como {
+                propiedad type como Function.
+                propiedad default como una función donde retorno {}.
+            }.
+            propiedad ambito como {
+                propiedad type como [Object, Array].
+                propiedad default como una función donde retorno {}.
+            }.
+            propiedad clave como {
+                propiedad type como String.
+                propiedad default como una función donde retorno "".
+            }.
+        }.
+        método data donde {
+            retorno {
+                propiedad internal_value como this.valorInicial.
+            }.
+        }.
+        propiedad watch como {
+            método internal_value con (nuevo_valor) donde {
+                asigno this.ambito[this.clave] como nuevo_valor.
+                hago this.onChange(nuevo_valor, this).
+            }.
+        }.
+    }.
+}.
+
+creo MsEntradaTexto como un componente vue2 con nombre "MsEntradaTexto" con plantilla {
+    <input :type="tipo" v-model="internal_value" />
+} con lógica {
+    retorno {
+        propiedad props como {
+            propiedad tipo como {
+                propiedad type como String.
+                propiedad default como una función donde retorno "text".
+            }.
+            propiedad valorInicial como {
+                propiedad type como String.
+                propiedad default como una función donde retorno "".
+            }.
+            propiedad onChange como {
+                propiedad type como Function.
+                propiedad default como una función donde retorno {}.
+            }.
+            propiedad ambito como {
+                propiedad type como [Object, Array].
+                propiedad default como una función donde retorno {}.
+            }.
+            propiedad clave como {
+                propiedad type como String.
+                propiedad default como una función donde retorno "".
+            }.
+        }.
+        método data donde {
+            retorno {
+                propiedad internal_value como this.valorInicial.
+            }.
+        }.
+        propiedad watch como {
+            método internal_value con (nuevo_valor) donde {
+                asigno this.ambito[this.clave] como nuevo_valor.
+                hago this.onChange(nuevo_valor, this).
+            }.
+        }.
+    }.
+}.
+
+creo _caracteres_interesantes como {
+    refrescar: "↻",
+    cruz: "⨯",
+    flecha: "▸",
+    menu: "☰"
+}.
+
+creo nombres_de_componentes_unicos como {
+    "ayuda": {}
+}.
+creo PaginaDeInicio como un componente vue2 con nombre "PaginaDeInicio" con plantilla {
+    <div class="PaginaDeInicio Component">
+        <MsComandoUniversal :comandos="comandos"></MsComandoUniversal>
+    </div>
+} con lógica {
+    retorno {
+        propiedad props como {
+
+        }.
+        método data donde {
+            retorno {
+                propiedad comandos como {
+
+                }.
+                propiedad is_displayed como true.
+                propiedad chat_alias como un texto aleatorio de 5 caracteres.toLowerCase().
+                propiedad conversation como "".
+                propiedad message_to_send como "".
+                propiedad selected_tab como "tab-A".
+                propiedad home_list como [{
+                    name: "identificación",
+                    link: "#/app/identificacion"
+                }, {
+                    name: "chats",
+                    link: "#/app/chats"
+                }, {
+                    name: "chats",
+                    link: "#/app/chats"
+                }].
+            }.
+        }.
+        propiedad methods como {
+            método send_message con () donde {
+                hago chat.socket.emit("client to server message", {
+                    propiedad alias como this.chat_alias.
+                    propiedad message como this.message_to_send.
+                }).
+                asigno this.message_to_send como "".
+                asigno this.$refs.chat_textarea.scrollTop como this.$refs.chat_textarea.scrollHeight.
+            }.
+        }.
+        método mounted donde {
+            @Sección: Subscripción a eventos de Socket.IO
+            hago chat.on("evento del chat principal", una lambda con (datos) donde {
+                asigno this.conversation como "[" + (datos.alias o datos.user) + "] " + datos.message + "\n" + this.conversation.
+            }).
+        }.
+        método unmounted donde {
+            @Sección: Desubscripción a eventos de Socket.IO
+            hago chat.off("evento del chat principal").
+        }.
+    }.
+}.
+
+creo App como una aplicación vue2 con nombre "App" con rutas [{
+    propiedad path como "*".
+    propiedad name como "Home".
+    propiedad component como PaginaDeInicio.
+    propiedad props como {}.
+}] con traducciones {
+    propiedad es como {}.
+    propiedad en como {}.
+    propiedad ca como {}.
+} con plantilla {
+  <div class="App Component Castelog-app">
+    <router-view></router-view>
+  </div>
+} con estilos {
+    html {}
+    body {}
+    .Component {}
+    .App {}
+} con lógica {
+  retorno {
+    método data donde {
+      retorno {
+        
+      }.
+    }.
+    propiedad methods como {}.
+    propiedad watch como {}.
+    método beforeMount donde {}.
+    método mounted donde {}.
+  }.
+} montada en "#app".

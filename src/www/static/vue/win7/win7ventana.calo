@@ -1,0 +1,52 @@
+creo Win7Ventana como un componente vue2 con nombre "Win7Ventana" con plantilla {
+    <div class="window" :class="windowClasses">
+        <div class="title-bar" :class="titleBarClasses">
+            <div class="title-bar-text" :class="titleBarTextClasses">
+                <slot name="titulo"></slot>
+            </div>
+            <div class="title-bar-controls" :class="titleBarControlsClasses">
+                <slot name="controles"></slot>
+            </div>
+        </div>
+        <div class="window-body" :class="windowBodyClasses">
+            <slot name="cuerpo"></slot>
+        </div>
+        <div class="status-bar" :class="statusBarClasses">
+            <slot name="estado"></slot>
+        </div>
+    </div>
+} con lógica {
+    retorno {
+        propiedad props como {
+            windowClasses: {
+                propiedad type como String.
+                propiedad default como una función donde retorno "".
+            },
+            titleBarClasses: {
+                propiedad type como String.
+                propiedad default como una función donde retorno "".
+            },
+            titleBarTextClasses: {
+                propiedad type como String.
+                propiedad default como una función donde retorno "".
+            },
+            titleBarControlsClasses: {
+                propiedad type como String.
+                propiedad default como una función donde retorno "".
+            },
+            windowBodyClasses: {
+                propiedad type como String.
+                propiedad default como una función donde retorno "".
+            },
+            statusBarClasses: {
+                propiedad type como String.
+                propiedad default como una función donde retorno "".
+            }
+        }.
+        método data con () donde {
+            retorno {
+
+            }.
+        }.
+    }.
+}.

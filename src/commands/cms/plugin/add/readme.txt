@@ -1,0 +1,1 @@
+añade un plugin al registro local.

@@ -1,0 +1,643 @@
+
+// [castelog:html5izable] ACTIVADO con: {"autor":"allnulled","nombre":"index","version":"1","contenido":{"head":"<head>\n    <title>CMS main app</title>\n    <meta charset=\"utf8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <script src=\"/static/js/calo.js\"></script>\n    <link rel=\"stylesheet\" href=\"/page/styles/7.css\" />\n    <link rel=\"stylesheet\" href=\"/page/styles/framework.css\" />\n    <link rel=\"stylesheet\" href=\"/page/styles/theme.css\" />\n    <link rel=\"stylesheet\" href=\"/page/styles/custom.css\" />\n    <script src=\"/static/js/socket.io-client.js\"></script>\n    <script src=\"./lib/chat.js\"></script>\n    <script src=\"/static/vue/vuedraggable.js\"></script>\n\n    <style>\n      .menu[role=\"tablist\"] button {\n          padding: 2px !important;\n      }\n      textarea {\n          font-size: 9px !important;\n      }\n      [role=\"tabpanel\"] {\n          padding: 8px;\n      }\n      ul,ul li {\n          padding: 0px;\n          margin: 0px;\n      }\n      ul {\n          padding-left: 5px;\n      }\n      .bordeado_1 {\n          border: 1px solid #888;\n      }\n      [role=\"tabpanel\"] {\n          margin-bottom: 0px;\n      }\n      table {\n          border-collapse: collapse;\n          width: 100%;\n      }\n      table td,\n      table td > button,\n      table td > button > span {\n          vertical-align: top;\n      }\n      table td .title-bar {\n          vertical-align: middle;\n      }\n      table td > button,\n      table td > button > span {\n          display: inline-block;\n      }\n      button.boton_de_multiconsola,\n      button.boton_de_multiconsola > span {\n          font-size: 10px;\n          padding-bottom: 0px;\n      }\n      button.boton_de_multiconsola > span {\n          min-width: 10px;\n      }\n      button.boton_de_multiconsola_de_barra_invisible {\n          min-width:6px;\n          min-height:18px;\n          padding-left:4px;\n          padding-right:4px;\n          font-size:10px;\n          opacity: 0.5;\n      }\n      .title-bar {\n          padding: 2px;\n          margin: 0px;\n      }\n      .window-body {\n          padding: 2px;\n          margin: 2px;\n      }\n      div.barra_invisible_de_multiconsola {\n           position:absolute;\n           top: 2px;\n           bottom: auto;\n           right: 2px;\n           padding: 2px;\n           padding-top:2px;\n           background-color: transparent;\n      }\n      .entrada_de_comandos_principal {\n          min-width: auto;\n          width: 100%;\n          resize: vertical;\n          height: auto;\n          font-size: 10px !important;\n          padding-top: 4px;\n      }\n      .panel_de_botones_de_multiconsola_1 {\n          width: auto;\n      }\n      .boton_de_multiconsola {\n          min-width: 28px;\n          padding-top: -2px;\n          padding-bottom: 0px;\n          padding-left: 4px;\n          padding-right: 4px;\n          white-space: nowrap;\n      }\n      button.boton_de_multiconsola > span,\n      button.boton_de_multiconsola > div > span {\n          font-size: 10px !important;\n      }\n      .window {\n          box-shadow: 0 0 0 transparent;\n      }\n\n      .secondary_window {\n          margin-top:2px;\n      }\n      .ms_entrada_texto_multilinea {\n          width: 100%;\n          resize: vertical;\n      }\n    </style>\n</head>","body":"<body><div id=\"app\"></div></body>"}}
+
+const chat = Castelog.metodos.una_importacion_de_modulo_universal_estandar("app.main.socket.chat", error => {
+throw error;});
+const MsBoton = Castelog.metodos.un_componente_vue2("MsBoton", "<button>"
+ + "        <slot></slot>"
+ + "    </button>", function(component) {return { props:{ 
+},
+data() {try {
+return { 
+};
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+};}, null);
+const MsComandoUniversal = Castelog.metodos.un_componente_vue2("MsComandoUniversal", "<div style=\"padding-left: 2px; padding-right: 4px; min-width: 150px;\">"
+ + "        <div class=\"window active\" style=\"width: 100%; text-align: left;\">"
+ + "            <div class=\"title-bar\">"
+ + "                <table style=\"width:100%; border-collapse: collapse;\">"
+ + "                    <tbody>"
+ + "                        <tr>"
+ + "                            <td>"
+ + "                                <MsBoton class=\"boton_de_multiconsola\" title=\"Visualizar\">"
+ + "                                    <span data-alt-chars=\"☰○\"> ☰ </span>"
+ + "                                </MsBoton>"
+ + "                            </td>"
+ + "                            <td style=\"width:100%;vertical-align:middle;position:relative;\">"
+ + "                                <div>"
+ + "                                    <MsEntradaTexto class=\"entrada_de_comandos_principal\" :ambito=\"this\" clave=\"texto_de_busqueda\" style=\"padding-top: 4px;\" placeholder=\"comando\"></MsEntradaTexto>"
+ + "                                </div>"
+ + "                            </td>"
+ + "                            <td>"
+ + "                                <MsBoton class=\"boton_de_multiconsola\" title=\"Configuraciones\">"
+ + "                                    <span>⚙</span>"
+ + "                                </MsBoton>"
+ + "                            </td>"
+ + "                            <td>"
+ + "                                <MsBoton class=\"boton_de_multiconsola\" title=\"Ejecutar\">"
+ + "                                    <span>▶</span>"
+ + "                                </MsBoton>"
+ + "                            </td>"
+ + "                        </tr>"
+ + "                    </tbody>"
+ + "                </table>"
+ + "            </div>"
+ + "            <div class=\"window-body\" style=\"display: none;\">"
+ + "                <table style=\"width:100%; border-collapse: collapse;\">"
+ + "                    <tbody>"
+ + "                        <tr v-for=\"(sugerencia, sugerencia_index) in sugerencias\" v-bind:key=\"'comando-universañ-' + uuid + '-sugerencia-' + sugerencia_index\">"
+ + "                            <td style=\"width:100%\">"
+ + "                                {{ sugerencia.valor }}"
+ + "                            </td>"
+ + "                        </tr>"
+ + "                    </tbody>"
+ + "                </table>"
+ + "            </div>"
+ + "        </div>"
+ + "        <div class=\"window active secondary_window\" style=\"width: 100%; text-align: left;\">"
+ + "            <div class=\"title-bar\">"
+ + "                <div class=\"title-bar-text\">sección de panel rápido</div>"
+ + "            </div>"
+ + "        </div>"
+ + "        <div class=\"window active secondary_window\" style=\"width: 100%; text-align: left;\">"
+ + "            <div class=\"title-bar\">"
+ + "                <table style=\"\" class=\"panel_de_botones_de_multiconsola_1\">"
+ + "                    <tbody>"
+ + "                        <tr>"
+ + "                            <td style=\"position:relative; width:20%;\">"
+ + "                                <MsBoton class=\"boton_de_multiconsola\" title=\"Sugerir\" style=\"width:100%;\">"
+ + "                                    <SoloReloj>"
+ + "                                        <span>...</span>"
+ + "                                    </SoloReloj>"
+ + "                                    <SoloMovil>"
+ + "                                        <span>...</span>"
+ + "                                    </SoloMovil>"
+ + "                                    <SoloTablet>"
+ + "                                        <span>... sugerir</span>"
+ + "                                    </SoloTablet>"
+ + "                                    <SoloOrdenador>"
+ + "                                        <span>... sugerir</span>"
+ + "                                    </SoloOrdenador>"
+ + "                                    <SoloTelevision>"
+ + "                                        <span>... sugerir</span>"
+ + "                                    </SoloTelevision>"
+ + "                                    <SoloProyector>"
+ + "                                        <span>... sugerir</span>"
+ + "                                    </SoloProyector>"
+ + "                                </MsBoton>"
+ + "                            </td>"
+ + "                            <td style=\"position:relative; width:20%;\">"
+ + "                                <MsBoton class=\"boton_de_multiconsola\" title=\"Limpiar\" style=\"width:100%;\">"
+ + "                                    <SoloReloj>"
+ + "                                        <span> ⨯ </span>"
+ + "                                    </SoloReloj>"
+ + "                                    <SoloMovil>"
+ + "                                        <span> ⨯ </span>"
+ + "                                    </SoloMovil>"
+ + "                                    <SoloTablet>"
+ + "                                        <span> ⨯ limpiar</span>"
+ + "                                    </SoloTablet>"
+ + "                                    <SoloOrdenador>"
+ + "                                        <span> ⨯ limpiar</span>"
+ + "                                    </SoloOrdenador>"
+ + "                                    <SoloTelevision>"
+ + "                                        <span> ⨯ limpiar</span>"
+ + "                                    </SoloTelevision>"
+ + "                                    <SoloProyector>"
+ + "                                        <span> ⨯ limpiar</span>"
+ + "                                    </SoloProyector>"
+ + "                                </MsBoton>"
+ + "                            </td>"
+ + "                            <td style=\"position:relative; width:20%;\">"
+ + "                                <MsBoton class=\"boton_de_multiconsola\" title=\"Anterior\" style=\"width:100%;\" data-fullchar=\"◀◁\">"
+ + "                                    <SoloReloj>"
+ + "                                        <span> « </span>"
+ + "                                    </SoloReloj>"
+ + "                                    <SoloMovil>"
+ + "                                        <span> « </span>"
+ + "                                    </SoloMovil>"
+ + "                                    <SoloTablet>"
+ + "                                        <span> « anterior</span>"
+ + "                                    </SoloTablet>"
+ + "                                    <SoloOrdenador>"
+ + "                                        <span> « anterior</span>"
+ + "                                    </SoloOrdenador>"
+ + "                                    <SoloTelevision>"
+ + "                                        <span> « anterior</span>"
+ + "                                    </SoloTelevision>"
+ + "                                    <SoloProyector>"
+ + "                                        <span> « anterior</span>"
+ + "                                    </SoloProyector>"
+ + "                                </MsBoton>"
+ + "                            </td>"
+ + "                            <td style=\"position:relative; width:20%;\">"
+ + "                                <MsBoton class=\"boton_de_multiconsola\" title=\"Posterior\" style=\"width:100%;\" data-fullchar=\"▶▷\">"
+ + "                                    <SoloReloj>"
+ + "                                        <span> » </span>"
+ + "                                    </SoloReloj>"
+ + "                                    <SoloMovil>"
+ + "                                        <span> » </span>"
+ + "                                    </SoloMovil>"
+ + "                                    <SoloTablet>"
+ + "                                        <span> » posterior</span>"
+ + "                                    </SoloTablet>"
+ + "                                    <SoloOrdenador>"
+ + "                                        <span> » posterior</span>"
+ + "                                    </SoloOrdenador>"
+ + "                                    <SoloTelevision>"
+ + "                                        <span> » posterior</span>"
+ + "                                    </SoloTelevision>"
+ + "                                    <SoloProyector>"
+ + "                                        <span> » posterior</span>"
+ + "                                    </SoloProyector>"
+ + "                                </MsBoton>"
+ + "                            </td>"
+ + "                            <td style=\"position:relative; width:20%;\">"
+ + "                                <MsBoton class=\"boton_de_multiconsola\" title=\"Visualizar\" style=\"width:100%;\" data-fullchar=\"☰○\">"
+ + "                                    <SoloReloj>"
+ + "                                        <span> ● </span>"
+ + "                                    </SoloReloj>"
+ + "                                    <SoloMovil>"
+ + "                                        <span> ● </span>"
+ + "                                    </SoloMovil>"
+ + "                                    <SoloTablet>"
+ + "                                        <span> ● ver</span>"
+ + "                                    </SoloTablet>"
+ + "                                    <SoloOrdenador>"
+ + "                                        <span> ● ver</span>"
+ + "                                    </SoloOrdenador>"
+ + "                                    <SoloTelevision>"
+ + "                                        <span> ● ver</span>"
+ + "                                    </SoloTelevision>"
+ + "                                    <SoloProyector>"
+ + "                                        <span> ● ver</span>"
+ + "                                    </SoloProyector>"
+ + "                                </MsBoton>"
+ + "                            </td>"
+ + "                        </tr>"
+ + "                    </tbody>"
+ + "                </table>"
+ + "            </div>"
+ + "        </div>"
+ + "        <div class=\"window active secondary_window\" style=\"width: 100%; text-align: left;\">"
+ + "            <div class=\"title-bar\">"
+ + "                <div class=\"title-bar-text\">sección de parámetros de función</div>"
+ + "            </div>"
+ + "        </div>"
+ + "        <div style=\"width: 100%; text-align: left;\" class=\"window active secondary_window\" v-for=\"(parametro, parametro_index) in parametros_de_comando\" v-bind:key=\"'consola-universal-uuid-' + uuid + '-parametro-de-comando-' + parametro_index\">"
+ + "            <table style=\"width:100%; border-collapse: collapse;\">"
+ + "                <tbody>"
+ + "                    <tr>"
+ + "                        <td style=\"position:relative; width:100%;\" colspan=\"1\" v-bind:key=\"'consola-universal-uuid-' + uuid + '-parametro-de-comando-' + parametro_index + '-texto-de-comando'\">"
+ + "                            <div class=\"title-bar-text\" style=\"padding:4px;box-sizing:border-box;\">"
+ + "                                <span style=\"display:inline-block;\">argumento {{ parametro_index + 1 }}: </span>"
+ + "                                <MsBoton class=\"boton_de_multiconsola\" title=\"eliminar parámetro\" style=\"width:auto; float: right;\" v-on:click.native=\"() => eliminar_parametro_de_comando(parametro_index)\" v-bind:key=\"'consola-universal-uuid-' + uuid + '-parametro-de-comando-' + parametro_index + '-boton-eliminar'\">"
+ + "                                    <span>eliminar</span>"
+ + "                                </MsBoton>"
+ + "                            </div>"
+ + "                            <MsEntradaTextoMultilinea class=\"entrada_de_comandos_principal\" style=\"\" placeholder=\"código aquí\" :value=\"parametros_de_comando[parametro_index]\" :on-change=\"x => cambiar_parametro(parametro_index, x)\" :ref=\"'argumento_para_comando_' + parametro_index\"></MsEntradaTextoMultilinea>"
+ + "                        </td>"
+ + "                    </tr>"
+ + "                </tbody>"
+ + "            </table>"
+ + "        </div>"
+ + "        <div style=\"width: 100%; text-align: left;\"  class=\"window active secondary_window\">"
+ + "            <table style=\"width:100%; border-collapse: collapse;\">"
+ + "                <tbody>"
+ + "                    <tr>"
+ + "                        <td style=\"position:relative; width:auto;\">"
+ + "                            <MsBoton class=\"boton_de_multiconsola\" title=\"añadir parámetro\" style=\"width:100%;\" v-on:click.native=\"agregar_parametros_de_comando\">"
+ + "                                <SoloReloj>"
+ + "                                    <span> + añadir</span>"
+ + "                                </SoloReloj>"
+ + "                                <SoloMovil>"
+ + "                                    <span> + añadir</span>"
+ + "                                </SoloMovil>"
+ + "                                <SoloTablet>"
+ + "                                    <span> + añadir</span>"
+ + "                                </SoloTablet>"
+ + "                                <SoloOrdenador>"
+ + "                                    <span> + añadir</span>"
+ + "                                </SoloOrdenador>"
+ + "                                <SoloTelevision>"
+ + "                                    <span> + añadir</span>"
+ + "                                </SoloTelevision>"
+ + "                                <SoloProyector>"
+ + "                                    <span> + añadir</span>"
+ + "                                </SoloProyector>"
+ + "                            </MsBoton>"
+ + "                        </td>"
+ + "                        <td style=\"position:relative; width:100%;\">"
+ + "                            <MsBoton class=\"boton_de_multiconsola\" title=\"guardar parámetros\" style=\"width:100%;\">"
+ + "                                <SoloReloj>"
+ + "                                    <span> ✔ guardar</span>"
+ + "                                </SoloReloj>"
+ + "                                <SoloMovil>"
+ + "                                    <span> ✔ guardar</span>"
+ + "                                </SoloMovil>"
+ + "                                <SoloTablet>"
+ + "                                    <span> ✔ guardar</span>"
+ + "                                </SoloTablet>"
+ + "                                <SoloOrdenador>"
+ + "                                    <span> ✔ guardar</span>"
+ + "                                </SoloOrdenador>"
+ + "                                <SoloTelevision>"
+ + "                                    <span> ✔ guardar</span>"
+ + "                                </SoloTelevision>"
+ + "                                <SoloProyector>"
+ + "                                    <span> ✔ guardar</span>"
+ + "                                </SoloProyector>"
+ + "                            </MsBoton>"
+ + "                        </td>"
+ + "                    </tr>"
+ + "                </tbody>"
+ + "            </table>"
+ + "        </div>"
+ + "        <div class=\"window active secondary_window\" style=\"width: 100%; text-align: left;\">"
+ + "            <div class=\"title-bar\">"
+ + "                <div class=\"title-bar-text\">sección de llamada de función</div>"
+ + "            </div>"
+ + "        </div>"
+ + "        <div style=\"width: 100%; text-align: left;\" class=\"window active secondary_window\">"
+ + "            <div style=\"padding-left: 2px; padding-right: 2px;\">"
+ + "                <MsEntradaTextoMultilinea :ambito=\"self\" clave=\"salida_de_funcion\"></MsEntradaTextoMultilinea>"
+ + "            </div>"
+ + "        </div>"
+ + "    </div>", function(component) {return { props:{ uuid:{ type:String,
+default:function() {try {
+return Castelog.metodos.un_texto_aleatorio(10, undefined);
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+esRaiz:{ type:Boolean,
+default:function() {try {
+return true;
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+comandos:{ type:Object,
+default:function() {try {
+return { 
+};
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+}
+},
+data() {try {
+return { self:this,
+texto_de_busqueda:"",
+parametros_de_comando:[  ],
+sugerencias:[  ],
+salida_de_funcion:""
+};
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+},
+methods:{ agregar_parametros_de_comando() {try {
+this.parametros_de_comando = [  ].concat( this.parametros_de_comando,
+[ { codigo:""
+} ] );
+this.$forceUpdate( true );
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+},
+cambiar_parametro( indice,
+valor ) {try {
+console.log("cambiar parametro:");
+console.log(indice);
+console.log(valor);
+this.parametros_de_comando[ indice ].codigo = valor;
+console.log(this.parametros_de_comando);
+this.$forceUpdate( true );
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+},
+eliminar_parametro_de_comando( indice ) {try {
+console.log(this.parametros_de_comando);
+const resultado = [  ].concat( this.parametros_de_comando );
+resultado.splice( indice,
+1 );
+this.parametros_de_comando = resultado;
+console.log("resultado");
+console.log(resultado);
+console.log("parametros_de_comando");
+console.log(this.parametros_de_comando);
+this.$forceUpdate( true );
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+watch:{ texto_de_busqueda( nuevo_valor ) {try {
+const sugerencias_formato_1 = nuevo_valor.split( new RegExp( "\\.| ",
+"g" ) );
+const sugerencias_formato_2 = Object.keys(Castelog.metodos.un_reducido_por(sugerencias_formato_1, (item, output, key, index, original) => {
+if((!(item in output))) {
+output.push( { nombre:item,
+valor:sugerencias_formato_1[ item ]
+} );
+}
+return output;
+}, [  ], null));
+console.log(nuevo_valor);
+console.log(sugerencias_formato_1);
+console.log(sugerencias_formato_2);
+const sugerencias_formato_final = sugerencias_formato_1;
+this.sugerencias = sugerencias_formato_final;
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+mounted() {try {
+this.sugerencias = Object.keys(this.comandos);
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+};}, null);
+const MsEntradaTextoMultilinea = Castelog.metodos.un_componente_vue2("MsEntradaTextoMultilinea", "<textarea class=\"ms_entrada_texto_multilinea\" v-model=\"internal_value\" />", function(component) {return { props:{ valorInicial:{ type:String,
+default:function() {try {
+return "";
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+onChange:{ type:Function,
+default:function() {try {
+return { 
+};
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+ambito:{ type:[ Object,
+Array ],
+default:function() {try {
+return { 
+};
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+clave:{ type:String,
+default:function() {try {
+return "";
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+}
+},
+data() {try {
+return { internal_value:this.valorInicial
+};
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+},
+watch:{ internal_value( nuevo_valor ) {try {
+this.ambito[ this.clave ] = nuevo_valor;
+this.onChange( nuevo_valor,
+this );
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+}
+};}, null);
+const MsEntradaTexto = Castelog.metodos.un_componente_vue2("MsEntradaTexto", "<input :type=\"tipo\" v-model=\"internal_value\" />", function(component) {return { props:{ tipo:{ type:String,
+default:function() {try {
+return "text";
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+valorInicial:{ type:String,
+default:function() {try {
+return "";
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+onChange:{ type:Function,
+default:function() {try {
+return { 
+};
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+ambito:{ type:[ Object,
+Array ],
+default:function() {try {
+return { 
+};
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+clave:{ type:String,
+default:function() {try {
+return "";
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+}
+},
+data() {try {
+return { internal_value:this.valorInicial
+};
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+},
+watch:{ internal_value( nuevo_valor ) {try {
+this.ambito[ this.clave ] = nuevo_valor;
+this.onChange( nuevo_valor,
+this );
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+}
+};}, null);
+const _caracteres_interesantes = { refrescar:"↻",
+cruz:"⨯",
+flecha:"▸",
+menu:"☰"
+};
+const nombres_de_componentes_unicos = { "ayuda":{ 
+}
+};
+const PaginaDeInicio = Castelog.metodos.un_componente_vue2("PaginaDeInicio", "<div class=\"PaginaDeInicio Component\">"
+ + "        <MsComandoUniversal :comandos=\"comandos\"></MsComandoUniversal>"
+ + "    </div>", function(component) {return { props:{ 
+},
+data() {try {
+return { comandos:{ 
+},
+is_displayed:true,
+chat_alias:Castelog.metodos.un_texto_aleatorio(5, undefined).toLowerCase(  ),
+conversation:"",
+message_to_send:"",
+selected_tab:"tab-A",
+home_list:[ { name:"identificación",
+link:"#/app/identificacion"
+},
+{ name:"chats",
+link:"#/app/chats"
+},
+{ name:"chats",
+link:"#/app/chats"
+} ]
+};
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+},
+methods:{ send_message(  ) {try {
+chat.socket.emit( "client to server message",
+{ alias:this.chat_alias,
+message:this.message_to_send
+} );
+this.message_to_send = "";
+this.$refs.chat_textarea.scrollTop = this.$refs.chat_textarea.scrollHeight;
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+},
+mounted() {try {
+chat.on( "evento del chat principal",
+( datos ) => {try {
+this.conversation = "[" + ( datos.alias || datos.user ) + "] " + datos.message + "\n" + this.conversation;
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+} );
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+},
+unmounted() {try {
+chat.off( "evento del chat principal" );
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+}
+};}, null);
+const App = Castelog.metodos.una_aplicacion_vue2(
+  "App",
+  "<div class=\"App Component Castelog-app\">"
+ + "    <router-view></router-view>"
+ + "  </div>",
+  function(component) {return { data() {try {
+return { 
+};
+} catch(error) {
+console.log(error);
+throw error;
+}
+
+},
+methods:{ 
+},
+watch:{ 
+},
+beforeMount() {
+},
+mounted() {
+}
+};},
+  "\"html {}\\n    body {}\\n    .Component {}\\n    .App {}\\n\", null", {},
+  [ { path:"*",
+name:"Home",
+component:PaginaDeInicio,
+props:{ 
+}
+} ],
+  { es:{ 
+},
+en:{ 
+},
+ca:{ 
+}
+},
+  "#app");
